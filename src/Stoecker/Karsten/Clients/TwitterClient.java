@@ -97,5 +97,3 @@ public class TwitterClient
         this.consumerSecret = consumerSecret;
     }
 }
-
-
