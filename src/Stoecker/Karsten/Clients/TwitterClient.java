@@ -18,7 +18,7 @@ import java.io.InputStreamReader;
  * @version 0.1
  *
  */
-public class TwitterClient
+public class TwitterClient implements Client
 {
     private String consumerKey;
     private String consumerSecret;
