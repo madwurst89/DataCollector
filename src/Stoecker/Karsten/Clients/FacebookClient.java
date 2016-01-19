@@ -18,7 +18,7 @@ import java.net.URL;
  * @version 0.1
  *
  */
-public class FacebookClient {
+public class FacebookClient implements Client{
 
     private String userAccessToken;
 
