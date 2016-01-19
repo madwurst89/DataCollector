@@ -1,8 +1,7 @@
 package Stoecker.Karsten.Helper;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -35,5 +34,44 @@ public class FileHelper
         }
 
         return true;
+    }
+
+    /**
+     * Method to read the text of a file to an {@link String}-Array.
+     *
+     * @param filePath Path to the file which should be read.
+     * @return {@link String}-Array which contains the text of the file. Every line is transformed to one array element.
+     */
+    public static String[] readFromFile(String filePath)
+    {
+        // based on http://javabeginners.de/Ein-_und_Ausgabe/Eine_Datei_zeilenweise_auslesen.php
+        File file = new File(filePath);
+
+        if (!file.canRead() || !file.isFile())
+            System.exit(0);
+
+
+        ArrayList<String> fileContentArrayList = new ArrayList<>();
+
+        try(BufferedReader in = new BufferedReader(new FileReader(file)))
+        {
+            String line;
+            int index = 0;
+
+            while((line = in.readLine()) != null)
+            {
+                fileContentArrayList.add(index, line);
+                index++;
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+        } catch (IOException e) {
+            System.out.println("Reading from file failed.");
+        }
+
+        String[] fileContentArray = fileContentArrayList.stream().toArray(String[]::new);
+
+        return fileContentArray;
     }
 }
