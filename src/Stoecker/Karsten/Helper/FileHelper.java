@@ -37,7 +37,7 @@ public class FileHelper
     }
 
     /**
-     * Method to read the text of a file to an {@link String}-Array.
+     * Method to read the text of a file to an {@link String}-Array. Returns null, if file were not found or could not be read.
      *
      * @param filePath Path to the file which should be read.
      * @return {@link String}-Array which contains the text of the file. Every line is transformed to one array element.
@@ -66,8 +66,10 @@ public class FileHelper
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
+            return null;
         } catch (IOException e) {
             System.out.println("Reading from file failed.");
+            return null;
         }
 
         String[] fileContentArray = fileContentArrayList.stream().toArray(String[]::new);

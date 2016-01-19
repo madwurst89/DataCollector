@@ -3,6 +3,7 @@ package Stoecker.Karsten;
 import Stoecker.Karsten.Clients.FacebookClient;
 import Stoecker.Karsten.Clients.LinkedInClient;
 import Stoecker.Karsten.Clients.TwitterClient;
+import Stoecker.Karsten.GUI.MainFrame;
 import Stoecker.Karsten.Helper.FileHelper;
 
 /**
@@ -29,5 +30,8 @@ public class Main {
         facebookClient = new FacebookClient(tokens[0]);
         twitterClient = new TwitterClient(tokens[1], tokens[2]);
         linkedInClient = new LinkedInClient(args[3], args[4]);
+
+        MainFrame mainFrame = new MainFrame();
+        mainFrame.setVisible(true);
     }
 }
