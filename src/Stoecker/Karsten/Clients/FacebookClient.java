@@ -21,17 +21,8 @@ import java.net.URL;
 public class FacebookClient implements Client{
 
     private String userAccessToken;
-
-    /**
-     *
-     * @param userAccessToken user access token
-     * @version 0.1
-     *
-     */
-    public FacebookClient(String userAccessToken)
-    {
-        this.userAccessToken = userAccessToken;
-    }
+    private static final String[] tokenTypes = {"User access token"};
+    private static String basicAPIPAth = "https://graph.facebook.com/";
 
     /**
      *
@@ -42,7 +33,7 @@ public class FacebookClient implements Client{
      */
     public JSONObject queryNode(String path)
     {
-        String sURL = "https://graph.facebook.com/" + path + "?access_token=" + userAccessToken;
+        String sURL = basicAPIPAth + path + "?access_token=" + userAccessToken;
 
         URL url = null;
         try {
@@ -86,6 +77,16 @@ public class FacebookClient implements Client{
         }
 
         return JSONHelper.getJSONObject(response.toString());
+    }
+
+    @Override
+    public String[] getTokenTypes() {
+        return tokenTypes;
+    }
+
+    @Override
+    public String getBasicAPIPath() {
+        return basicAPIPAth;
     }
 
     /**

@@ -26,12 +26,9 @@ public class LinkedInClient implements Client
     private Token requestToken;
     private Token accessToken;
 
-    public LinkedInClient(String consumerKey, String consumerSecret)
-    {
-        this.consumerKey = consumerKey;
-        this.consumerSecret = consumerSecret;
-    }
+    private static String basicAPIPath = "https://api.linkedin.com/v1/";
 
+    private static final String[] tokenTypes = {"Consumer key", "Consumer secret", "Request token", "Access token"};
 
     @Override
     public JSONObject queryNode(String path) {
@@ -58,7 +55,7 @@ public class LinkedInClient implements Client
             Verifier v = new Verifier(verifierString);
             accessToken = service.getAccessToken(requestToken, v);
 
-            OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.linkedin.com/v1/" + path +"?format=json");
+            OAuthRequest request = new OAuthRequest(Verb.GET, basicAPIPath + path +"?format=json");
             service.signRequest(accessToken, request);
             Response response = request.send();
 
@@ -66,5 +63,15 @@ public class LinkedInClient implements Client
         }
 
         return null;
+    }
+
+    @Override
+    public String[] getTokenTypes() {
+        return tokenTypes;
+    }
+
+    @Override
+    public String getBasicAPIPath() {
+        return basicAPIPath;
     }
 }

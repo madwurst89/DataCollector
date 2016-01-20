@@ -26,11 +26,9 @@ public class TwitterClient implements Client
     private Token requestToken;
     private Token accessToken;
 
-    public TwitterClient(String consumerKey, String consumerSecret)
-    {
-        this.consumerKey = consumerKey;
-        this.consumerSecret = consumerSecret;
-    }
+    private static String basicAPIPath = "https://api.twitter.com/1.1/";
+
+    private static final String[] tokenTypes = {"Consumer key", "Consumer secret", "Request token", "Access token"};
 
     /**
      * Method to query the Twitter API by just defining the search expression, beginning after https://api.twitter.com/1.1/. This method uses pin-based authorization.
@@ -70,6 +68,16 @@ public class TwitterClient implements Client
         Response response = request.send();
 
         return JSONHelper.getJSONObject(response.toString());
+    }
+
+    @Override
+    public String[] getTokenTypes() {
+        return tokenTypes;
+    }
+
+    @Override
+    public String getBasicAPIPath() {
+        return basicAPIPath;
     }
 
 
