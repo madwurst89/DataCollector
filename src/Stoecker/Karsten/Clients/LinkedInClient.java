@@ -10,6 +10,7 @@ import org.scribe.oauth.OAuthService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -20,22 +21,37 @@ import java.io.InputStreamReader;
  */
 public class LinkedInClient implements Client
 {
-    private String consumerKey;
-    private String consumerSecret;
-
-    private Token requestToken;
-    private Token accessToken;
-
     private static String basicAPIPath = "https://api.linkedin.com/v1/";
 
+    private LinkedHashMap<String, Token> tokens;
     private static final String[] tokenTypes = {"Consumer key", "Consumer secret", "Request token", "Access token"};
+
+    public LinkedInClient()
+    {
+        tokens = new LinkedHashMap<>();
+
+        for(String tokenType : tokenTypes)
+        {
+            tokens.put(tokenType, new Token("", ""));
+        }
+    }
+
+    private Token getToken(String tokenType)
+    {
+        return tokens.get(tokenType);
+    }
 
     @Override
     public JSONObject queryNode(String path) {
 
-        OAuthService service = new ServiceBuilder().provider(LinkedInApi.class).apiKey(consumerKey).apiSecret(consumerSecret).build();
+        Token consumerKey = tokens.get("Consumer key");
+        Token consumerSecret = tokens.get("Consumer secret");
+        Token requestToken = tokens.get("Request token");
+        Token accessToken = tokens.get("Access token");
 
-        if(requestToken == null || accessToken == null)
+        OAuthService service = new ServiceBuilder().provider(LinkedInApi.class).apiKey(consumerKey.getToken()).apiSecret(consumerSecret.getToken()).build();
+
+        if(requestToken.getToken() == "" || accessToken.getToken() == "")
         {
             requestToken = service.getRequestToken();
             String authUrl = service.getAuthorizationUrl(requestToken);
@@ -73,5 +89,18 @@ public class LinkedInClient implements Client
     @Override
     public String getBasicAPIPath() {
         return basicAPIPath;
+    }
+
+    /**
+     * Method to change consumer key.
+     *
+     * @param tokenType Type of token which should be set.
+     * @param token Token which should be set.
+     * @version 0.1
+     *
+     */
+    public void setToken(String tokenType, String token)
+    {
+        tokens.put(tokenType, new Token(token, ""));
     }
 }

@@ -24,6 +24,7 @@ public class JSONHelper
      */
     public static JSONObject getJSONObject(String string)
     {
+        System.out.println(string);
         return new JSONObject(string);
     }
 

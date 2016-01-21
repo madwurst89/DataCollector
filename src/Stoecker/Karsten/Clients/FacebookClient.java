@@ -2,6 +2,7 @@ package Stoecker.Karsten.Clients;
 
 import Stoecker.Karsten.Helper.JSONHelper;
 import org.json.JSONObject;
+import org.scribe.model.Token;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -20,9 +22,20 @@ import java.net.URL;
  */
 public class FacebookClient implements Client{
 
-    private String userAccessToken;
-    private static final String[] tokenTypes = {"User access token"};
     private static String basicAPIPAth = "https://graph.facebook.com/";
+
+    private LinkedHashMap<String, Token> tokens;
+    private static final String[] tokenTypes = {"User access token"};
+
+    public FacebookClient()
+    {
+        tokens = new LinkedHashMap<>();
+
+        for(String tokenType : tokenTypes)
+        {
+            tokens.put(tokenType, new Token("", ""));
+        }
+    }
 
     /**
      *
@@ -33,7 +46,9 @@ public class FacebookClient implements Client{
      */
     public JSONObject queryNode(String path)
     {
-        String sURL = basicAPIPAth + path + "?access_token=" + userAccessToken;
+        Token userAccessToken = tokens.get("User access token");
+
+        String sURL = basicAPIPAth + path + "?access_token=" + userAccessToken.getToken();
 
         URL url = null;
         try {
@@ -90,14 +105,15 @@ public class FacebookClient implements Client{
     }
 
     /**
-     * Method to change user access token after initialization.
+     * Method to change consumer key.
      *
-     * @param userAccessToken user access token
+     * @param tokenType Type of token which should be set.
+     * @param token Token which should be set.
      * @version 0.1
      *
      */
-    public void setUserAccessToken(String userAccessToken)
+    public void setToken(String tokenType, String token)
     {
-        this.userAccessToken = userAccessToken;
+        tokens.put(tokenType, new Token(token, ""));
     }
 }

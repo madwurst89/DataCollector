@@ -10,6 +10,7 @@ import org.scribe.oauth.OAuthService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
 
 /**
  *
@@ -20,15 +21,20 @@ import java.io.InputStreamReader;
  */
 public class TwitterClient implements Client
 {
-    private String consumerKey;
-    private String consumerSecret;
+    private static final String basicAPIPath = "https://api.twitter.com/1.1/";
 
-    private Token requestToken;
-    private Token accessToken;
-
-    private static String basicAPIPath = "https://api.twitter.com/1.1/";
-
+    private LinkedHashMap<String, Token> tokens;
     private static final String[] tokenTypes = {"Consumer key", "Consumer secret", "Request token", "Access token"};
+
+    public TwitterClient()
+    {
+        tokens = new LinkedHashMap<>();
+
+        for(String tokenType : tokenTypes)
+        {
+            tokens.put(tokenType, new Token("", ""));
+        }
+    }
 
     /**
      * Method to query the Twitter API by just defining the search expression, beginning after https://api.twitter.com/1.1/. This method uses pin-based authorization.
@@ -40,20 +46,26 @@ public class TwitterClient implements Client
      */
     public JSONObject queryNode(String path)
     {
-        // based on example from https://github.com/scribejava/scribejava/wiki/Getting-Started
-        OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).apiKey(consumerKey).apiSecret(consumerSecret).build();
+        Token consumerKey = tokens.get("Consumer key");
+        Token consumerSecret = tokens.get("Consumer secret");
+        Token requestToken = tokens.get("Request token");
+        Token accessToken = tokens.get("Access token");
 
-        if(requestToken == null || accessToken == null) {
+        // based on example from https://github.com/scribejava/scribejava/wiki/Getting-Started
+        OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).apiKey(consumerKey.getToken()).apiSecret(consumerSecret.getToken()).build();
+
+        if(requestToken.getToken() == "" || accessToken.getToken() == "") {
             requestToken = service.getRequestToken();
             String authUrl = service.getAuthorizationUrl(requestToken);
 
             System.out.println("Open " + authUrl + " and authorize app.");
             System.out.println("Enter pin:");
 
-            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+            //read pin/veriefierString from terminal
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             String verifierString = null;
             try {
-                verifierString = bufferRead.readLine();
+                verifierString = bufferedReader.readLine();
             } catch (IOException e) {
                 System.out.println("Pin could not be read.");
                 System.exit(0);
@@ -63,11 +75,11 @@ public class TwitterClient implements Client
             accessToken = service.getAccessToken(requestToken, v);
         }
 
-        OAuthRequest request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1.1/" + path);
+        OAuthRequest request = new OAuthRequest(Verb.GET, basicAPIPath + path);
         service.signRequest(accessToken, request);
         Response response = request.send();
 
-        return JSONHelper.getJSONObject(response.toString());
+        return JSONHelper.getJSONObject(response.isSuccessful() + "");
     }
 
     @Override
@@ -80,28 +92,16 @@ public class TwitterClient implements Client
         return basicAPIPath;
     }
 
-
     /**
-     * Method to change consumer key token.
+     * Method to change consumer key.
      *
-     * @param consumerKey consumer key
+     * @param tokenType Type of token which should be set.
+     * @param token Token which should be set.
      * @version 0.1
      *
      */
-    public void setConsumerKey(String consumerKey)
+    public void setToken(String tokenType, String token)
     {
-        this.consumerKey = consumerKey;
-    }
-
-    /**
-     * Method to change consumer secret token.
-     *
-     * @param consumerSecret consumer secret
-     * @version 0.1
-     *
-     */
-    public void setConsumerSecret(String consumerSecret)
-    {
-        this.consumerSecret = consumerSecret;
+        tokens.put(tokenType, new Token(token, ""));
     }
 }

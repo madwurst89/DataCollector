@@ -1,6 +1,8 @@
 package Stoecker.Karsten.GUI.Panel;
 
 import Stoecker.Karsten.Clients.Client;
+import Stoecker.Karsten.Helper.FileHelper;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -9,12 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.util.LinkedHashMap;
 
 public class ClientPanel extends JPanel
 {
     Client client;
-    LinkedHashMap<String, JPanel> tokenFields = new LinkedHashMap<>();
+    LinkedHashMap<String, JTextField> tokenTextFields = new LinkedHashMap<>();
     JTextArea textArea = new JTextArea();
     JLabel queryLabel;
     JTextField queryTextField = new JTextField();
@@ -24,6 +27,8 @@ public class ClientPanel extends JPanel
         this.client = client;
         this.setLayout(new BorderLayout());
         this.add(initializeTokenPanel(client.getTokenTypes()), BorderLayout.PAGE_START);
+        textArea.setWrapStyleWord( true );
+        textArea.setLineWrap(true);
         this.add(textArea, BorderLayout.CENTER);
         this.add(initializeQueryPanel(), BorderLayout.PAGE_END);
     }
@@ -50,9 +55,21 @@ public class ClientPanel extends JPanel
                     JFileChooser fileChooser = new JFileChooser();
                     fileChooser.setFileFilter(new FileNameExtensionFilter("Token files (.tok)","tok"));
 
-                    int returnValue = fileChooser.showOpenDialog(null);
+                    fileChooser.showOpenDialog(null);
 
-                    // client.setToken
+                    File selectedFile = fileChooser.getSelectedFile();
+
+                    JSONObject tokens = FileHelper.readJSONObjectFromFile(selectedFile);
+
+
+                    for(String string : tokenTextFields.keySet()) // laufe über alle Token-Textfelder
+                    {
+                        if(tokens.has(string.toLowerCase())) // Key für Textfield in JSONObject (gelesen aus Datei)?
+                        {
+                            ((JTextField) tokenTextFields.get(string)).setText(tokens.getString(string.toLowerCase()));
+                            client.setToken(string, tokens.getString(string.toLowerCase()));
+                        }
+                    }
                 }
 
                 @Override
@@ -76,7 +93,7 @@ public class ClientPanel extends JPanel
                 }
             });
 
-            this.tokenFields.put(tokenFieldString, new JPanel());
+            this.tokenTextFields.put(tokenFieldString, tokenTextField);
             labelPanel.add(new JLabel(tokenFieldString));
             textFieldPanel.add(tokenTextField);
         }
@@ -104,6 +121,8 @@ public class ClientPanel extends JPanel
                 if(queryTextField.getText() != "")
                 {
                     textArea.setText("work in progess ...");
+                    JSONObject result = client.queryNode(queryTextField.getText().trim());
+                    textArea.setText(result.toString());
                 }
             }
         });
@@ -112,6 +131,4 @@ public class ClientPanel extends JPanel
 
         return queryPanel;
     }
-
-
 }

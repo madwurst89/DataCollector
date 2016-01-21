@@ -1,5 +1,7 @@
 package Stoecker.Karsten.Helper;
 
+import org.json.JSONObject;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -75,5 +77,37 @@ public class FileHelper
         String[] fileContentArray = fileContentArrayList.stream().toArray(String[]::new);
 
         return fileContentArray;
+    }
+
+    public static JSONObject readJSONObjectFromFile(File file)
+    {
+        if (!file.canRead() || !file.isFile())
+        {
+            // throw new Exception
+        }
+
+        String jsonObjectString = "";
+
+        try(BufferedReader in = new BufferedReader(new FileReader(file)))
+        {
+
+            String line;
+            int index = 0;
+
+            while((line = in.readLine()) != null)
+            {
+                jsonObjectString += line;
+                index++;
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+            return null;
+        } catch (IOException e) {
+            System.out.println("Reading from file failed.");
+            return null;
+        }
+
+        return new JSONObject(jsonObjectString.trim()); // trim removes white spaces´
     }
 }

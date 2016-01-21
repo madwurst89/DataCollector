@@ -21,4 +21,6 @@ public interface Client {
     public String[] getTokenTypes();
 
     public String getBasicAPIPath();
+
+    public void setToken(String tokenType, String token);
 }
