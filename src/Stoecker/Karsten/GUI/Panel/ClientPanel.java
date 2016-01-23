@@ -120,7 +120,6 @@ public class ClientPanel extends JPanel
 
                 if(queryTextField.getText() != "")
                 {
-                    textArea.setText("work in progess ...");
                     JSONObject result = client.queryNode(queryTextField.getText().trim());
                     textArea.setText(result.toString());
                 }

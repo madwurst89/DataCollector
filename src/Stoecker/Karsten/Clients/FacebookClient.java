@@ -4,12 +4,13 @@ import Stoecker.Karsten.Helper.JSONHelper;
 import org.json.JSONObject;
 import org.scribe.model.Token;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 
@@ -59,39 +60,49 @@ public class FacebookClient implements Client{
 
         int responseCode = 0;
         HttpURLConnection httpURLConnection = null;
-        try {
+        try
+        {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             responseCode = httpURLConnection.getResponseCode();
-
-            if(responseCode == 400) // catch expired user access token = error code 400
-            {
-                System.out.println("User access token expired. Create a new one on https://developers.facebook.com/tools/explorer");
-                System.exit(0);
-            }
         }
-        catch (ProtocolException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
 
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-        try(BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream())))
+        if(responseCode == 400) // catch expired user access token = error code 400
         {
-            while ((inputLine = in.readLine()) != null)
+            JOptionPane.showMessageDialog(null, "Your user access token is expired. Please go to https://developers.facebook.com/tools/explorer, get a new one, save it to token file and open it.", "User access token expired", JOptionPane.WARNING_MESSAGE);
+
+            if(Desktop.isDesktopSupported())
             {
-                response.append(inputLine);
+                try {
+                    Desktop.getDesktop().browse(new URL("https://developers.facebook.com/tools/explorer").toURI());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
-        } catch (IOException e)
-        {
-            e.printStackTrace();
+            return new JSONObject();
         }
+        else
+        {
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            try(BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream())))
+            {
+                while ((inputLine = in.readLine()) != null)
+                {
+                    response.append(inputLine);
+                }
 
-        return JSONHelper.getJSONObject(response.toString());
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            return JSONHelper.getJSONObject(response.toString());
+        }
     }
 
     @Override

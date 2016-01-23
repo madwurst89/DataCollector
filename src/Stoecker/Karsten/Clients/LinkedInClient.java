@@ -7,9 +7,9 @@ import org.scribe.builder.api.LinkedInApi;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.swing.*;
+import java.awt.*;
+import java.net.URL;
 import java.util.LinkedHashMap;
 
 /**
@@ -56,29 +56,31 @@ public class LinkedInClient implements Client
             requestToken = service.getRequestToken();
             String authUrl = service.getAuthorizationUrl(requestToken);
 
-            System.out.println("Open " + authUrl + " and authorize app.");
-            System.out.println("Enter pin:");
-
-            BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-            String verifierString = null;
-            try {
-                verifierString = bufferRead.readLine();
-            } catch (IOException e) {
-                System.out.println("Pin could not be read.");
-                System.exit(0);
+            if(Desktop.isDesktopSupported())
+            {
+                try {
+                    Desktop.getDesktop().browse(new URL(authUrl).toURI());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
-            Verifier v = new Verifier(verifierString);
-            accessToken = service.getAccessToken(requestToken, v);
+            String verifierString = (String) JOptionPane.showInputDialog(null, "Authorize app and enter pin:", "Enter pin", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
-            OAuthRequest request = new OAuthRequest(Verb.GET, basicAPIPath + path +"?format=json");
-            service.signRequest(accessToken, request);
-            Response response = request.send();
+            if(verifierString != "" && verifierString != null)
+            {
+                Verifier v = new Verifier(verifierString);
+                accessToken = service.getAccessToken(requestToken, v);
 
-            return JSONHelper.getJSONObject(response.getBody());
+                OAuthRequest request = new OAuthRequest(Verb.GET, basicAPIPath + path + "?format=json");
+                service.signRequest(accessToken, request);
+                Response response = request.send();
+
+                return JSONHelper.getJSONObject(response.getBody());
+            }
         }
 
-        return null;
+        return new JSONObject();
     }
 
     @Override
