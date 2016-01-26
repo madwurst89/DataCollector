@@ -24,7 +24,11 @@ public class JSONHelper
      */
     public static JSONObject getJSONObject(String string)
     {
-        System.out.println(string);
+        if(string.charAt(0) != '{')
+        {
+            string = "{ \"root\": " + string + " }";
+        }
+
         return new JSONObject(string);
     }
 
