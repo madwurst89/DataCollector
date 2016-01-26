@@ -25,6 +25,9 @@ public class LinkedInClient implements Client
 
     private LinkedHashMap<String, Token> tokens;
     private static final String[] tokenTypes = {"Consumer key", "Consumer secret", "Request token", "Access token"};
+    private Token requestToken;
+    private Token accessToken;
+    private Verifier verifier;
 
     public LinkedInClient()
     {
@@ -46,12 +49,11 @@ public class LinkedInClient implements Client
 
         Token consumerKey = tokens.get("Consumer key");
         Token consumerSecret = tokens.get("Consumer secret");
-        Token requestToken = tokens.get("Request token");
-        Token accessToken = tokens.get("Access token");
+
 
         OAuthService service = new ServiceBuilder().provider(LinkedInApi.class).apiKey(consumerKey.getToken()).apiSecret(consumerSecret.getToken()).build();
 
-        if(requestToken.getToken() == "" || accessToken.getToken() == "")
+        if(verifier == null)
         {
             requestToken = service.getRequestToken();
             String authUrl = service.getAuthorizationUrl(requestToken);
@@ -71,16 +73,14 @@ public class LinkedInClient implements Client
             {
                 Verifier v = new Verifier(verifierString);
                 accessToken = service.getAccessToken(requestToken, v);
-
-                OAuthRequest request = new OAuthRequest(Verb.GET, basicAPIPath + path + "?format=json");
-                service.signRequest(accessToken, request);
-                Response response = request.send();
-
-                return JSONHelper.getJSONObject(response.getBody());
             }
         }
 
-        return new JSONObject();
+        OAuthRequest request = new OAuthRequest(Verb.GET, basicAPIPath + path + "?format=json");
+        service.signRequest(accessToken, request);
+        Response response = request.send();
+
+        return JSONHelper.getJSONObject(response.getBody());
     }
 
     @Override
