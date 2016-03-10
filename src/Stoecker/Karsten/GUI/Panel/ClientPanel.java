@@ -26,7 +26,7 @@ public class ClientPanel extends JPanel
     {
         this.client = client;
         this.setLayout(new BorderLayout());
-        this.add(initializeTokenPanel(client.getTokenTypes()), BorderLayout.PAGE_START);
+        this.add(initializeTokenPanel(client.getRequiredTokenTypes()), BorderLayout.PAGE_START);
         textArea.setWrapStyleWord( true );
         textArea.setLineWrap(true);
         this.add(textArea, BorderLayout.CENTER);

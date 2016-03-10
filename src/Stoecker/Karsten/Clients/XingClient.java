@@ -75,7 +75,7 @@ public class XingClient implements Client{
     }
 
     @Override
-    public String[] getTokenTypes() {
+    public String[] getRequiredTokenTypes() {
         return tokenTypes;
     }
 

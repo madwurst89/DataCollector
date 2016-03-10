@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
  *
  * @author Karsten Stoecker
  * @date 18.01.2016
- * @version 0.1
+ * @version 0.2
  *
  */
 public class TwitterClient implements Client
@@ -85,7 +85,7 @@ public class TwitterClient implements Client
     }
 
     @Override
-    public String[] getTokenTypes() {
+    public String[] getRequiredTokenTypes() {
         return tokenTypes;
     }
 

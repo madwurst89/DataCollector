@@ -106,7 +106,7 @@ public class FacebookClient implements Client{
     }
 
     @Override
-    public String[] getTokenTypes() {
+    public String[] getRequiredTokenTypes() {
         return tokenTypes;
     }
 

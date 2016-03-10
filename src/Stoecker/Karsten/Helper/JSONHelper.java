@@ -19,7 +19,7 @@ public class JSONHelper
      *
      * @param string String representation of an JSON object.
      * @return To {@link org.json.JSONObject} transformed {@link String}.
-     * @version 0.1
+     * @version 0.2
      *
      */
     public static JSONObject getJSONObject(String string)
