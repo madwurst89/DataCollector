@@ -39,20 +39,22 @@ public class TwitterClient extends Client
     {
         Token consumerKey = getToken(TokenType.CONSUMER_KEY);
         Token consumerSecret = getToken(TokenType.CONSUMER_SECRET);
-        Token requestToken = null;
-        Token accessToken = null;
+        Token requestToken = getToken(TokenType.REQUEST_TOKEN);
+        Token accessToken = getToken(TokenType.ACCESS_TOKEN);
 
         OAuthService service = new ServiceBuilder().provider(TwitterApi.SSL.class).apiKey(consumerKey.getToken()).apiSecret(consumerSecret.getToken()).build();
 
         if(verifier == null)
         {
             requestToken = service.getRequestToken();
-            String authUrl = service.getAuthorizationUrl(requestToken);
+            setToken(TokenType.REQUEST_TOKEN, requestToken);
+
+            String authorizationUrl = service.getAuthorizationUrl(requestToken);
 
             if(Desktop.isDesktopSupported())
             {
                 try {
-                    Desktop.getDesktop().browse(new URL(authUrl).toURI());
+                    Desktop.getDesktop().browse(new URL(authorizationUrl).toURI());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -62,9 +64,11 @@ public class TwitterClient extends Client
 
             if(verifierString != "" && verifierString != null)
             {
-                Verifier v = new Verifier(verifierString);
-                accessToken = service.getAccessToken(requestToken, v);
+                verifier = new Verifier(verifierString);
+                accessToken = service.getAccessToken(requestToken, verifier);
+                setToken(TokenType.ACCESS_TOKEN, accessToken);
             }
+            fireTokenChanged();
         }
 
         OAuthRequest request = new OAuthRequest(Verb.GET, getBasicAPIPath() + path);

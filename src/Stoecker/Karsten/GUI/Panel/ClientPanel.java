@@ -1,8 +1,9 @@
-package Stoecker.Karsten.View.Panel;
+package Stoecker.Karsten.GUI.Panel;
 
 import Stoecker.Karsten.Client.Client;
 import Stoecker.Karsten.Client.TokenType;
 import Stoecker.Karsten.Helper.FileHelper;
+import Stoecker.Karsten.Listener.TokenChangedListener;
 import org.json.JSONObject;
 import org.scribe.model.Token;
 
@@ -16,7 +17,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.LinkedHashMap;
 
-public class ClientPanel extends JPanel
+public class ClientPanel extends JPanel implements TokenChangedListener
 {
     Client client;
     LinkedHashMap<String, JTextField> tokenTextFields = new LinkedHashMap<>();
@@ -28,6 +29,7 @@ public class ClientPanel extends JPanel
     {
         // general panel initialization
         this.client = client;
+        client.addListener(this);
         this.setLayout(new BorderLayout());
 
         // token panel initialization
@@ -70,21 +72,24 @@ public class ClientPanel extends JPanel
                     fileChooser.showOpenDialog(null);
                     File selectedFile = fileChooser.getSelectedFile();
 
-                    // read tokens from file
-                    JSONObject tokensFromFile = FileHelper.readJSONObjectFromFile(selectedFile);
-
-
-                    for(String tokenType : tokenTypeNames) // laufe über alle Token-Textfelder
+                    if(selectedFile != null)
                     {
-                        if(tokensFromFile.has(tokenType.toLowerCase())) // Tokentyp in Datei enthalten?
+                        // read tokens from file
+                        JSONObject tokensFromFile = FileHelper.readJSONObjectFromFile(selectedFile);
+
+
+                        for(String tokenType : tokenTypeNames) // laufe über alle Token-Textfelder
                         {
-                            ((JTextField) tokenTextFields.get(tokenType)).setText(tokensFromFile.getString(tokenType.toLowerCase()));
+                            if(tokensFromFile.has(tokenType.toLowerCase())) // Tokentyp in Datei enthalten?
+                            {
+                                ((JTextField) tokenTextFields.get(tokenType)).setText(tokensFromFile.getString(tokenType.toLowerCase()));
 
-                            Token token = new Token(tokensFromFile.getString(tokenType.toLowerCase()), "");
+                                Token token = new Token(tokensFromFile.getString(tokenType.toLowerCase()), "");
 
-                            Integer tokenTypeAsInteger = TokenType.getIntRepresentation(tokenType);
+                                Integer tokenTypeAsInteger = TokenType.getIntRepresentation(tokenType);
 
-                            client.setToken(tokenTypeAsInteger, token);
+                                client.setToken(tokenTypeAsInteger, token);
+                            }
                         }
                     }
                 }
@@ -118,6 +123,7 @@ public class ClientPanel extends JPanel
 
         containerPanel.add(namePanel, BorderLayout.LINE_START);
         containerPanel.add(valuePanel, BorderLayout.CENTER);
+
         return containerPanel;
     }
 
@@ -147,5 +153,16 @@ public class ClientPanel extends JPanel
         queryPanel.add(queryButton, BorderLayout.LINE_END);
 
         return queryPanel;
+    }
+
+    @Override
+    public void tokenChanged()
+    {
+        String[] tokenTypes = client.getRequiredTokenTypeNames();
+        for(String tokenTypeName : tokenTypes)
+        {
+            Integer tokenNameAsInteger = TokenType.getIntRepresentation(tokenTypeName);
+            tokenTextFields.get(tokenTypeName).setText(String.valueOf(client.getToken(tokenNameAsInteger).getToken()));
+        }
     }
 }

@@ -1,8 +1,10 @@
 package Stoecker.Karsten.Client;
 
+import Stoecker.Karsten.Listener.TokenChangedListener;
 import org.json.JSONObject;
 import org.scribe.model.Token;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -16,9 +18,13 @@ public abstract class Client {
 
     private String basicAPIPath;
     private LinkedHashMap<Integer, Token> tokens;
+    private ArrayList<TokenChangedListener> tokenChangedListener;
+
 
     public Client(String basicAPIPath, int[] tokenTypes)
     {
+        tokenChangedListener = new ArrayList<>();
+
         this.basicAPIPath = basicAPIPath;
 
         tokens = new LinkedHashMap<>();
@@ -87,5 +93,18 @@ public abstract class Client {
     public void setToken(int tokenType, Token token)
     {
         tokens.put(tokenType, token);
+    }
+
+    public void addListener(TokenChangedListener listener)
+    {
+        tokenChangedListener.add(listener);
+    }
+
+    public void fireTokenChanged()
+    {
+        for(TokenChangedListener tCL : tokenChangedListener)
+        {
+            tCL.tokenChanged();
+        }
     }
 }

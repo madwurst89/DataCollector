@@ -32,8 +32,8 @@ public class LinkedInClient extends Client
     {
         Token consumerKey = getToken(TokenType.CONSUMER_KEY);
         Token consumerSecret = getToken(TokenType.CONSUMER_SECRET);
-        Token requestToken = null;
-        Token accessToken = null;
+        Token requestToken = getToken(TokenType.REQUEST_TOKEN);
+        Token accessToken = getToken(TokenType.ACCESS_TOKEN);
 
         OAuthService service = new ServiceBuilder().provider(LinkedInApi.class).apiKey(consumerKey.getToken()).apiSecret(consumerSecret.getToken()).build();
 
@@ -59,7 +59,9 @@ public class LinkedInClient extends Client
             {
                 verifier = new Verifier(verifierString);
                 accessToken = service.getAccessToken(requestToken, verifier);
+                setToken(TokenType.ACCESS_TOKEN, accessToken);
             }
+            fireTokenChanged();
         }
 
         OAuthRequest request = new OAuthRequest(Verb.GET, getBasicAPIPath() + path + "?format=json");
