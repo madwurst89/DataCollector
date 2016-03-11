@@ -1,4 +1,4 @@
-package Stoecker.Karsten.Clients;
+package Stoecker.Karsten.Client;
 
 import Stoecker.Karsten.Helper.JSONHelper;
 import org.json.JSONObject;
@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.LinkedHashMap;
 
 /**
  *
@@ -21,21 +20,11 @@ import java.util.LinkedHashMap;
  * @version 0.1
  *
  */
-public class FacebookClient implements Client{
-
-    private static String basicAPIPAth = "https://graph.facebook.com/";
-
-    private LinkedHashMap<String, Token> tokens;
-    private static final String[] tokenTypes = {"User access token"};
+public class FacebookClient extends Client{
 
     public FacebookClient()
     {
-        tokens = new LinkedHashMap<>();
-
-        for(String tokenType : tokenTypes)
-        {
-            tokens.put(tokenType, new Token("", ""));
-        }
+        super(BasicAPIPath.facebook,new int[]{TokenType.USER_ACCESS_TOKEN});
     }
 
     /**
@@ -47,11 +36,12 @@ public class FacebookClient implements Client{
      */
     public JSONObject queryNode(String path)
     {
-        Token userAccessToken = tokens.get("User access token");
+        Token userAccessToken = getToken(TokenType.USER_ACCESS_TOKEN);
 
-        String sURL = basicAPIPAth + path + "?access_token=" + userAccessToken.getToken();
+        String sURL = getBasicAPIPath() + path + "?access_token=" + userAccessToken.getToken();
 
         URL url = null;
+
         try {
             url = new URL(sURL);
         } catch (MalformedURLException e) {
@@ -103,28 +93,5 @@ public class FacebookClient implements Client{
 
             return JSONHelper.getJSONObject(response.toString());
         }
-    }
-
-    @Override
-    public String[] getRequiredTokenTypes() {
-        return tokenTypes;
-    }
-
-    @Override
-    public String getBasicAPIPath() {
-        return basicAPIPAth;
-    }
-
-    /**
-     * Method to change consumer key.
-     *
-     * @param tokenType Type of token which should be set.
-     * @param token Token which should be set.
-     * @version 0.1
-     *
-     */
-    public void setToken(String tokenType, String token)
-    {
-        tokens.put(tokenType, new Token(token, ""));
     }
 }

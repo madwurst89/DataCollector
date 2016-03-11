@@ -1,7 +1,7 @@
-package Stoecker.Karsten.GUI.Frames;
+package Stoecker.Karsten.View.Frames;
 
-import Stoecker.Karsten.Clients.*;
-import Stoecker.Karsten.GUI.Panel.ClientPanel;
+import Stoecker.Karsten.Client.*;
+import Stoecker.Karsten.View.Panel.ClientPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,22 +26,22 @@ public class MainFrame extends JFrame
         clientsTabbedPane = new JTabbedPane();
 
         facebookClient = new FacebookClient();
-        ImageIcon facebookIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/GUI/ico/facebookIcon512.png");
+        ImageIcon facebookIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/View/ico/facebookIcon512.png");
         facebookClientPanel = new ClientPanel(facebookClient);
         clientsTabbedPane.addTab("facebook", facebookIcon, facebookClientPanel, "Tab for querying the facebook REST API.");
 
         twitterClient = new TwitterClient();
-        ImageIcon twitterIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/GUI/ico/twitterIcon512.png");
+        ImageIcon twitterIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/View/ico/twitterIcon512.png");
         twitterClientPanel = new ClientPanel(twitterClient);
         clientsTabbedPane.addTab("twitter", twitterIcon, twitterClientPanel, "Tab for querying the twitter API.");
 
         linkedInClient = new LinkedInClient();
-        ImageIcon linkedinIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/GUI/ico/linkedinIcon512.png");
+        ImageIcon linkedinIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/View/ico/linkedinIcon512.png");
         linkedinClientPanel = new ClientPanel(linkedInClient);
         clientsTabbedPane.addTab("LinkedIn", linkedinIcon, linkedinClientPanel, "Tab for querying the LinkedIn API.");
 
         xingClient = new XingClient();
-        ImageIcon xingIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/GUI/ico/xingIcon512.png");
+        ImageIcon xingIcon = new ImageIcon("/Volumes/Daten/Programmierung/Java/DataCollector/src/Stoecker/Karsten/View/ico/xingIcon512.png");
         xingClientPanel = new ClientPanel(xingClient);
         clientsTabbedPane.addTab("Xing", xingIcon, xingClientPanel, "Tab for querying the Xing API.");
 

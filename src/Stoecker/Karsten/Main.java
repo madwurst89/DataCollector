@@ -1,6 +1,6 @@
 package Stoecker.Karsten;
 
-import Stoecker.Karsten.GUI.Frames.MainFrame;
+import Stoecker.Karsten.View.Frames.MainFrame;
 
 /**
  *
