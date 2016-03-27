@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
+ * Class which encapsulates read and write {@link String}s and {@link JSONObject}s to file methods.
  *
  * @author Karsten Stoecker
  * @date 18.01.2016
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class FileHelper
 {
     /**
+     * Method to write a {@link String} to a defined file. File will be overwritten, if a file with this name already exists in the specified folder.
      *
      * @param text Text of the file, which should be written.
      * @param filePath Path and filename of the file, which should be written.
@@ -79,6 +81,13 @@ public class FileHelper
         return fileContentArray;
     }
 
+    /**
+     * Method to read a {@link JSONObject} from a defined file at the given path.
+     *
+     * @return {@link JSONObject} that has been read from the file.
+     * @version 0.1
+     *
+     */
     public static JSONObject readJSONObjectFromFile(File file)
     {
         if (!file.canRead() || !file.isFile())

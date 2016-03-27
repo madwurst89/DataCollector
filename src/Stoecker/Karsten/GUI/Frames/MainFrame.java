@@ -1,12 +1,17 @@
 package Stoecker.Karsten.GUI.Frames;
 
-import Stoecker.Karsten.Client.*;
+import Stoecker.Karsten.Client.FacebookClient;
+import Stoecker.Karsten.Client.LinkedInClient;
+import Stoecker.Karsten.Client.TwitterClient;
+import Stoecker.Karsten.Client.XingClient;
 import Stoecker.Karsten.GUI.Panel.ClientPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
-
+/**
+ * Frame which contains a number of {@link ClientPanel} for different social networks.
+ */
 public class MainFrame extends JFrame
 {
     private FacebookClient facebookClient;

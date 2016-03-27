@@ -12,6 +12,7 @@ import java.awt.*;
 import java.net.URL;
 
 /**
+ * Client for querying data from the social network Facebook.
  *
  * @author Karsten Stoecker
  * @date 18.01.2016
@@ -74,6 +75,8 @@ public class TwitterClient extends Client
         OAuthRequest request = new OAuthRequest(Verb.GET, getBasicAPIPath() + path);
         service.signRequest(accessToken, request);
         Response response = request.send();
+
+        insertIntoQueriedData(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
 
         return JSONHelper.getJSONObject(response.getBody());
     }

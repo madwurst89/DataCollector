@@ -12,6 +12,7 @@ import java.awt.*;
 import java.net.URL;
 
 /**
+ * Client for querying data from the social network LinkedIn.
  *
  * @author Karsten Stoecker
  * @date 20.01.2016
@@ -67,6 +68,8 @@ public class LinkedInClient extends Client
         OAuthRequest request = new OAuthRequest(Verb.GET, getBasicAPIPath() + path + "?format=json");
         service.signRequest(accessToken, request);
         Response response = request.send();
+
+        insertIntoQueriedData(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
 
         return JSONHelper.getJSONObject(response.getBody());
     }

@@ -1,5 +1,8 @@
 package Stoecker.Karsten.Client;
 
+/**
+ * Class which acts as a container for the different token types which are needed by diverse social networks.
+ */
 public final class TokenType {
 
     public static final int USER_ACCESS_TOKEN = 1;
@@ -8,11 +11,12 @@ public final class TokenType {
     public static final int REQUEST_TOKEN = 4;
     public static final int ACCESS_TOKEN = 5;
 
-    private TokenType()
-    {
-
-    }
-
+    /**
+     * Method to translate the int representation of token type to string representation (e.g. for use at a gui).
+     *
+     * @param tokenTypeAsInt int representation of token type
+     * @return string representation of token type
+     */
     public static String getStringRepresentation(int tokenTypeAsInt)
     {
         if(tokenTypeAsInt == USER_ACCESS_TOKEN)
@@ -41,6 +45,12 @@ public final class TokenType {
         }
     }
 
+    /**
+     * Method to translate the int representation of a number of token types to string representation (e.g. for use at a gui).
+     *
+     * @param tokenTypeAsInt int representation of token types
+     * @return string representation of token types
+     */
     public static String[] getStringRepresentation(Integer[] tokenTypeAsInt)
     {
         String[] tokenTypesAsString = new String[tokenTypeAsInt.length];
@@ -53,6 +63,12 @@ public final class TokenType {
         return tokenTypesAsString;
     }
 
+    /**
+     * Method to translate the string representation of token type to int representation.
+     *
+     * @param tokenTypeAsString string representation of token type
+     * @return int representation of token type
+     */
     public static int getIntRepresentation(String tokenTypeAsString)
     {
         if(tokenTypeAsString.equals("user access token"))

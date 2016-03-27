@@ -17,6 +17,9 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.LinkedHashMap;
 
+/**
+ * Panel which allows the querying of a social network, by providing a field for token, the query path and the result.
+ */
 public class ClientPanel extends JPanel implements TokenChangedListener
 {
     Client client;
@@ -45,6 +48,12 @@ public class ClientPanel extends JPanel implements TokenChangedListener
         this.add(initializeQueryPanel(), BorderLayout.PAGE_END);
     }
 
+    /**
+     * Method to initialize the display area for the needed token.
+     *
+     * @param tokenTypeNames Representation of the token types which are required by the network
+     * @return initialized {@link JPanel} with all required token fields and a onClick-Listener for opening the token file.
+     */
     private JPanel initializeTokenPanel(String[] tokenTypeNames)
     {
         JPanel containerPanel = new JPanel();
@@ -127,6 +136,11 @@ public class ClientPanel extends JPanel implements TokenChangedListener
         return containerPanel;
     }
 
+    /**
+     * Method to initialze the area for query path input.
+     *
+     * @return initialized {@link JPanel} with basic API path {@link JLabel}, query path inputfield and a button to send query.
+     */
     private JPanel initializeQueryPanel()
     {
         basicAPIPathLabel = new JLabel(client.getBasicAPIPath());

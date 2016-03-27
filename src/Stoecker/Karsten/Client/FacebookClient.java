@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Client for querying data from the social network Facebook.
  *
  * @author Karsten Stoecker
  * @date 15.01.2016
@@ -22,18 +23,12 @@ import java.net.URL;
  */
 public class FacebookClient extends Client{
 
+
     public FacebookClient()
     {
         super(BasicAPIPath.facebook,new int[]{TokenType.USER_ACCESS_TOKEN});
     }
 
-    /**
-     *
-     * @param path Path to the node to query, excluding https://graph.facebook.com/
-     * @return Node as {@link JSONObject}
-     * @version 0.1
-     *
-     */
     public JSONObject queryNode(String path)
     {
         Token userAccessToken = getToken(TokenType.USER_ACCESS_TOKEN);
@@ -90,6 +85,8 @@ public class FacebookClient extends Client{
             {
                 e.printStackTrace();
             }
+
+            insertIntoQueriedData(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
 
             return JSONHelper.getJSONObject(response.toString());
         }
