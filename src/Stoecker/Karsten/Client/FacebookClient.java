@@ -17,7 +17,6 @@ import java.net.URL;
  * Client for querying data from the social network Facebook.
  *
  * @author Karsten Stoecker
- * @date 15.01.2016
  * @version 0.1
  *
  */
@@ -86,7 +85,7 @@ public class FacebookClient extends Client{
                 e.printStackTrace();
             }
 
-            insertIntoQueriedData(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
+            insertIntoQueriedDataCollecions(getBasicAPIPath(), path,JSONHelper.getJSONObject(response.toString()));
 
             return JSONHelper.getJSONObject(response.toString());
         }

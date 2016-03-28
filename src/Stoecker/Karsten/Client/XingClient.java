@@ -15,7 +15,6 @@ import java.net.URL;
  * Client for querying data from the social network Facebook.
  *
  * @author Karsten Stoecker
- * @date 19.01.2016
  * @version 0.1
  */
 public class XingClient extends Client{

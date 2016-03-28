@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
  * Class which acts as a template and implements basic functions for a client which is able to query data from a social network.
  *
  * @author Karsten Stoecker
- * @date 18.01.2016
  * @version 0.2
  *
  */
@@ -149,7 +148,7 @@ public abstract class Client {
     /**
      * Method to insert queried data from different networks into one model.
      */
-    public static void insertIntoQueriedData(String basicAPIPath, String queryPath, JSONObject queryResult)
+    public static void insertIntoQueriedDataCollecions(String basicAPIPath, String queryPath, JSONObject queryResult)
     {
         standardModel.insertQueryResponse(basicAPIPath, queryPath, queryResult);
     }

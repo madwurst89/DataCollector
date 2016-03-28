@@ -9,7 +9,6 @@ import java.util.ArrayList;
  * Class which encapsulates read and write {@link String}s and {@link JSONObject}s to file methods.
  *
  * @author Karsten Stoecker
- * @date 18.01.2016
  * @version 0.1
  *
  */

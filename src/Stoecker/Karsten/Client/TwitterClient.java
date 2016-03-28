@@ -15,7 +15,6 @@ import java.net.URL;
  * Client for querying data from the social network Facebook.
  *
  * @author Karsten Stoecker
- * @date 18.01.2016
  * @version 0.2
  *
  */
@@ -76,7 +75,7 @@ public class TwitterClient extends Client
         service.signRequest(accessToken, request);
         Response response = request.send();
 
-        insertIntoQueriedData(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
+        insertIntoQueriedDataCollecions(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.getBody()));
 
         return JSONHelper.getJSONObject(response.getBody());
     }

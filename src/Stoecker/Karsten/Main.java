@@ -5,7 +5,6 @@ import Stoecker.Karsten.GUI.Frames.MainFrame;
 /**
  *
  * @author Karsten Stoecker
- * @date 15.01.2016
  * @version 0.3
  *
  */

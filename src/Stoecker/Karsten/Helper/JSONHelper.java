@@ -6,7 +6,6 @@ import org.json.JSONObject;
  * Class which provides methods for transforming from and to a {@link JSONObject}.
  *
  * @author Karsten Stoecker
- * @date 18.01.2016
  * @version 0.1
  *
  */

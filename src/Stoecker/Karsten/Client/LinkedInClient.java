@@ -15,7 +15,6 @@ import java.net.URL;
  * Client for querying data from the social network LinkedIn.
  *
  * @author Karsten Stoecker
- * @date 20.01.2016
  * @version 0.2
  *
  */
@@ -69,7 +68,7 @@ public class LinkedInClient extends Client
         service.signRequest(accessToken, request);
         Response response = request.send();
 
-        insertIntoQueriedData(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
+        insertIntoQueriedDataCollecions(getBasicAPIPath(), path, JSONHelper.getJSONObject(response.toString()));
 
         return JSONHelper.getJSONObject(response.getBody());
     }
